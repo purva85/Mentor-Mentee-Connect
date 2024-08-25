@@ -1,0 +1,167 @@
+{% extends "home_layout.html" %}
+
+{% block title %}
+    Resources {{name}}
+{% endblock %}
+
+{% block body %}
+<h2 style="text-align:center;">Add Resources here</h2>
+
+<div class="container">
+<br>
+<div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Search by Resource Title" id="searchInput">
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+  </div>
+</div>
+<br>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >Add a resource</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Resource</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ url_for('addResource') }}" method="post" id="addResource" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="resource_title" class="col-form-label">Title</label>
+            <input type="text" class="form-control" name="resource_title">
+          </div>
+          <div class="form-group">
+            <label for="resource_description" class="col-form-label">Description</label>
+            <textarea class="form-control" name="resource_description"></textarea>
+          </div>
+          <div class="form-group">
+            <a href="#" class="btn btn-sm btn-block btn-danger">
+              <input type="file" name="file" accept="application/pdf">
+            </a>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" form="addResource" class="btn btn-primary btn-block">Submit Resource</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="space-20"></div>
+
+<div class="line"></div>
+
+<div class="row">
+  {% for resource in resources_data %}
+    <div class="col-sm-6">
+      <div class="card" id='card-1'>
+        <div class="card-body">
+          <h5 class="card-title">{{ resource.title }}</h5>
+          <p class="card-text">{{ resource.description }}</p>
+          <p>Date Uploaded: {{ resource.date_uploaded.strftime("%Y-%m-%d") }}</p>
+          <p>Time: {{ resource.date_uploaded.strftime("%H:%M:%S") }}</p>
+
+          {% set file_path = ["resources/", resource.file]|join %}
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ resource.id }}">
+            Open Resource preview
+          </button>
+          <a href="{{ url_for('static', filename= file_path) }}" class="btn btn-warning" target="_new">Open in a new tab</a>
+          <br></br>
+          <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal{{ resource.id }}">
+            Delete Resource
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insert a line after every odd resource -->
+    {% if loop.index is even and not loop.last %}
+      <div class="line"></div>
+    {% endif %}
+
+  <!-- Modal -->
+  <div class="modal fade" id="{{resource.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">{{resource.title}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <iframe src="{{ url_for('static', filename= file_path) }}" width = "470px" height="600px">
+          <p>Your browser does not support iframes therefore the preview feature will not work :'(</p>
+        </iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary d-md-none" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="deleteModal{{ resource.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalTitle{{ resource.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalTitle{{ resource.id }}">Delete Resource</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this resource?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <form action="{{ url_for('deleteResource', id=resource.id) }}" method="post">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+</div>
+
+<script>
+  // Function to filter resources based on input text
+  function filterResources() {
+    var input, filter, cards, cardTitle, i;
+    input = document.getElementById('searchInput');
+    filter = input.value.toUpperCase();
+    cards = document.getElementsByClassName('card');
+    for (i = 0; i < cards.length; i++) {
+      cardTitle = cards[i].querySelector('.card-title');
+      if (cardTitle.innerText.toUpperCase().indexOf(filter) > -1) {
+        cards[i].style.display = '';
+      } else {
+        cards[i].style.display = 'none';
+      }
+    }
+  }
+
+  // Event listener for search button click
+  document.getElementById('searchButton').addEventListener('click', filterResources);
+
+  // Event listener for input field change
+  document.getElementById('searchInput').addEventListener('input', filterResources);
+</script>
+
+{% endblock %}
+
+{% block right_button %}
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('menteeHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('resources') }}';">Resources</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('analysis') }}';">Analysis</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-success" onclick="window.location.href='{{ url_for('editProfile') }}';">Profile</button>
+{% endblock %}

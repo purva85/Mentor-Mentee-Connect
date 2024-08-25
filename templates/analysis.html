@@ -1,0 +1,65 @@
+{% extends "home_layout.html" %}
+
+{% block title %}
+    Analysis
+{% endblock %}
+
+{% block body %}
+    <h2 style="text-align: center;">Performance Analysis</h2>
+    <br><br>
+    <div class="container">
+        <form id="semester-form" method="post">
+            <div class="semester-select" style="align-items: center;">
+                <!-- Dropdown for selecting semester -->
+                <label for="semester">Select Semester:</label>
+                <select name="semester" id="semester" class="form-control">
+                    <option value="1" {% if selected_semester == '1' %} selected {% endif %}>Semester 1</option>
+                    <option value="2" {% if selected_semester == '2' %} selected {% endif %}>Semester 2</option>
+                    <option value="3" {% if selected_semester == '3' %} selected {% endif %}>Semester 3</option>
+                    <option value="4" {% if selected_semester == '4' %} selected {% endif %}>Semester 4</option>
+                    <option value="5" {% if selected_semester == '5' %} selected {% endif %}>Semester 5</option>
+                    <option value="6" {% if selected_semester == '6' %} selected {% endif %}>Semester 6</option>
+                    <option value="7" {% if selected_semester == '7' %} selected {% endif %}>Semester 7</option>
+                    <option value="8" {% if selected_semester == '8' %} selected {% endif %}>Semester 8</option>
+                    <!-- Add options for other semesters as needed -->
+                </select>
+            </div>
+        </form>
+
+        <br><br>
+
+            <div class="col-md-12">
+                <h3>CGPA Progress</h3>
+                <img id="line-graph-img" style='width: 70%; height: 70%; text-align: center;' src="data:image/png;base64,{{ plot_data }}" alt="Mentee CGPA Plot">
+            </div>
+
+            <br><br>
+            <div class="col-md-12"> 
+                <h3>Contribution of Subjects</h3>
+                    <div id="pie-chart-container">
+                        <img id="pie-chart-img" style="width: 70%; height: 70%; text-align: center;" src="data:image/png;base64,{{ initial_plot_data }}" alt="Contribution of Subjects Pie Chart">
+                    </div>
+                </div>
+
+            <br><br>
+            <div class="col-md-12">
+                <h3>IA Marks v/s Semester Marks</h3>
+                <img id="bar-graph-img" style='width: 80%; height: 80%; text-align: center;' src="data:image/png;base64,{{ plot_data3 }}" alt="Relationship between Internal Assessment Marks and Semester Marks">
+            </div>
+        </div>
+        
+        <script>
+            // JavaScript to automatically submit the form when a semester is selected
+            document.getElementById("semester").addEventListener("change", function() {
+                document.getElementById("semester-form").submit();
+            });
+        </script>
+
+{% endblock %}
+
+{% block right_button %}
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('menteeHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('resources') }}';">Resources</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('analysis') }}';">Analysis</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-success" onclick="window.location.href='{{ url_for('editProfile') }}';">Profile</button>
+{% endblock %}

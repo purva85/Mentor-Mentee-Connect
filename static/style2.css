@@ -1,0 +1,602 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 400;
+    line-height: 1.7em;
+    text-align: justify;
+    color: #000;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.navbar {
+    padding: 15px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    width: 100%;
+}
+
+#sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 999;
+    background: #004c4c;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar.active {
+    margin-left: -250px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #004c4c;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    color: #fff;
+}
+
+#sidebar ul li a:hover {
+    color: black;
+    background: #fff;
+}
+
+#sidebar ul a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #004c4c;
+}
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #fff;
+}
+
+ul.CTAs {
+    padding: 20px;
+}
+
+ul.CTAs a {
+    text-align: center;
+    font-size: 0.9em !important;
+    display: block;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+a.download {
+    background: #fff;
+    color: #000;
+}
+
+a.article,
+a.article:hover {
+    background: #6d7fcc !important;
+    color: #fff !important;
+}
+
+#profilePicture {
+    max-width: 100%;
+	border-radius: 50%;
+    border: 3px solid #000000;
+    background-color: #004c4c;
+	max-height: 200px; /* You can adjust the max height as needed */
+}
+
+.profile-picture1 {
+    max-width: 100%;
+	border-radius: 50%;
+	max-height: 200px;
+    background: #004c4c; /* You can adjust the max height as needed */
+}
+
+#background-image {
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    text-align: center;
+    width: 50%;
+    height: 50%;
+    z-index: -1; /* Make sure the image stays behind the content */
+    background-image: url('/static/img/background.jpg'); 
+    background-size: cover; 
+    opacity: 0.5; /* Adjust the opacity as needed */
+}
+
+#background-image1 {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    text-align: center;
+    width: 50%;
+    height: 50%;
+    z-index: -1; /* Make sure the image stays behind the content */
+    background-image: url('/static/img/background1.jpg'); 
+    background-size: cover; 
+    opacity: 0.5; /* Adjust the opacity as needed */
+}
+
+#primary{
+    display: none;
+}
+
+.mentee-card-wrapper {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .flip-card {
+    width: 100%;
+  }
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: calc(100% - 250px);
+    padding: 40px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#content.active {
+    width: 100%;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #content{
+        display: block;
+        width: 100%;
+    }
+
+    #sidebarCollapse{
+        display: none;
+    }
+
+    #sidebar{
+        display: none;
+    }
+
+    .nav.navbar-nav.ml-auto .btn-logout {
+        margin-top: 10px; /* Adjust this value to your preference */
+    }
+
+    .form_container {
+        padding: 10px; /* Adjust the padding for the form container */
+    }
+
+    .login_btn {
+        font-size: 1.2em; /* Adjust the font size of the login button */
+    }
+
+    #background-image {
+        position: absolute;
+        max-width: 200px;
+        height: 200px;
+        transform: translate(-2%, 100%);
+        background-size: contain; 
+        background-position: center;
+        opacity: 0.4; /* Adjust the opacity as needed */
+    }
+
+    #background-image1 {
+        position: absolute;
+        max-width: 200px;
+        height: 200px;
+        transform: translate(2%,100%);
+        background-size: contain; 
+        background-position: center;
+        opacity: 0.4; /* Adjust the opacity as needed */
+    }
+
+    p{
+        font-size: 12px;
+        text-align: justify;
+        font-weight: 400;
+    }
+
+    .profile-picture {
+        margin-left: 16%;
+        margin-right: auto;
+        display: block; /* Necessary for margin auto centering */
+    }
+
+    h1{
+        padding-bottom: 20px;
+    }
+
+    h2{
+        text-align: center;
+    }
+
+    .btn{
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .semester-select{
+        text-align: center;
+    }
+
+    table {
+        width: 100%;
+        margin: 10px 10px;
+        text-align: center;
+        border: none;
+    }
+
+    tr {
+        display: block;
+        margin-bottom: 10px; /* Add spacing between cards */
+    }
+
+    th{
+        display: block;
+    }
+
+    td {
+        display: block;
+        text-align: right;
+        padding: 8px;
+        border: none; /* Remove borders for individual cells */
+        position: relative;
+        padding-left: 50%;
+    }
+
+    td:last-child {
+        border-bottom: none; /* Remove bottom border from the last cell */
+    }
+
+    .button-table {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .button-table div {
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .add-row-button, .delete-row-button {
+        width: 50%;
+    }
+
+    .submit{
+        align-content: center;
+    }
+
+    .btn{
+        align-content: center;
+        margin-right: 10px;
+    }
+
+    .footer{
+        display: block;
+        z-index: 10;
+        position: fixed;
+        bottom: 0;
+    }
+
+    #card-1{
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .mentee-card-wrapper {
+        max-width: 230px;
+      }
+
+    #searchButton{
+        margin: 0 0;
+    }
+
+    .container img{
+        width: 100%;
+        height: 100%;
+        align-items: center;
+    }
+
+    .container h3{
+        text-align: center;
+    }
+
+    #primary{
+        display: block;
+    }
+}
+
+@media (max-width: 400px) {
+    #content{
+        display: block;
+        width: 100%;
+    }
+
+    .mentee-card-wrapper {
+        max-width: 225px;
+      }
+}
+
+.button-table {
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-between;
+}
+
+.button-table div {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid #000;
+}
+
+table, th, td {
+    border: 1px solid #000;
+}
+
+th, td {
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.add-row-button, .delete-row-button {
+    display: inline-block;
+    border-radius: 20px;
+    margin: 10px auto;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.form {
+max-width: 100%;
+padding: 5px; 
+border: 1px solid #ccc; 
+border-radius: 5px; 
+}
+
+.form1 {
+max-width: 80%;
+max-height: 30px;
+padding: 5px;
+border: 1px solid #ccc; 
+border-radius: 5px; 
+}
+
+.form::placeholder {
+color: #999;
+}
+
+.form1::placeholder {
+color: #999;
+}
+
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+}
+
+h4 {
+display: flex;
+}
+
+
+.profile-user-info {
+    display: table;
+    width: 98%;
+    width: calc(100% - 24px);
+    margin: 0 auto
+}
+
+.profile-info-row {
+    display: table-row
+}
+
+.profile-info-name,
+.profile-info-value {
+    display: table-cell;
+    border-top: 1px dotted #D5E4F1
+}
+
+.toggle-sidebar {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+.profile-info-name {
+    text-align: right;
+    padding: 6px 10px 6px 4px;
+    font-weight: 400;
+    color: #667E99;
+    background-color: transparent;
+    width: 110px;
+    vertical-align: middle
+}
+
+.profile-info-value {
+    padding: 6px 4px 6px 6px
+}
+
+.profile-info-value>span+span:before {
+    display: inline;
+    content: ",";
+    margin-left: 1px;
+    margin-right: 3px;
+    color: #666;
+    border-bottom: 1px solid #FFF
+}
+
+.profile-info-value>span+span.editable-container:before {
+    display: none
+}
+
+.profile-info-row:first-child .profile-info-name,
+.profile-info-row:first-child .profile-info-value {
+    border-top: none
+}
+
+.profile-user-info-striped {
+    border: 1px solid #DCEBF7
+}
+
+.profile-user-info-striped .profile-info-name {
+    color: #336199;
+    background-color: #EDF3F4;
+    border-top: 1px solid #F7FBFF
+}
+
+.profile-user-info-striped .profile-info-value {
+    border-top: 1px dotted #DCEBF7;
+    padding-left: 12px
+}
+
+.profile-picture {
+    border: 1px solid #CCC;
+    background-color: #FFF;
+    padding: 4px;
+    display: inline-block;
+    max-width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, .15)
+}
+
+/* CSS for the loading spinner overlay */
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* semi-transparent white background */
+    z-index: 9999; /* make sure the loader is on top of everything */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand_logo_container {
+    position: absolute;
+    height: 170px;
+    width: 170px;
+    top: -75px;
+    border-radius: 50%;
+    background: #004c4c;
+    padding: 10px;
+    text-align: center;
+}
+.brand_logo {
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    -webkit-animation:spin 14s linear infinite;
+-moz-animation:spin 14s linear infinite;
+animation:spin 14s linear infinite;
+
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }

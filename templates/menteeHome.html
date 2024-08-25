@@ -1,0 +1,38 @@
+{% extends "home_layout.html" %}
+
+{% block title %}
+    Home {{name}}
+{% endblock %}
+
+{% block body %}
+<h2 style="text-align:center;">Mentee Home</h2>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+<p>We are a platform that connects mentors and mentees to help them achieve their goals.
+    Whether you are a seasoned professional looking to give back or an aspiring individual
+    seeking guidance, we have a mentor for you.</p>
+    <h4>What is mentoring?</h4>
+    <p>Mentoring is a relationship between two people where the mentor provides guidance, support,
+    and advice to the mentee. Mentors can help mentees develop their skills, navigate their
+    careers, and achieve their personal and professional goals.</p>
+    <h4>Why is mentoring important?</h4>
+    <p>Mentoring can have a significant impact on both the mentor and the mentee. Mentees benefit
+    from the knowledge, experience, and insights of their mentors. Mentors also benefit from the
+    relationship, as it gives them the opportunity to share their expertise and help others succeed.</p>
+    </div>
+    </div>
+</div>
+<div class="line"></div>
+
+<img src='/static/img/background.jpg' class='img-fluid' id='background-image'>
+<img src='/static/img/background1.jpg' class='img-fluid' id='background-image1'>
+{% endblock %}
+
+{% block right_button %}
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('menteeHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('resources') }}';">Resources</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('analysis') }}';">Analysis</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-success" onclick="window.location.href='{{ url_for('editProfile') }}';">Profile</button>
+{% endblock %}

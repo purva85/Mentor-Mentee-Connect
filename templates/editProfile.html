@@ -1,0 +1,760 @@
+{% extends "home_layout.html" %}
+
+{% block title %}
+    Edit Profile for: {{session['fname']}}
+
+{% endblock %}
+
+<head>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+{% block body %}
+
+<h1 style="text-align:center;"> Profile </h1>
+{% if session["user_type"] == "mentee" %}
+<ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+  <li class="nav-item">
+    <button class="btn" id="personal_details-btn"> Personal Details </button>
+  </li>
+  <li class="nav-item">
+    <button class="btn" id="academic_details-btn"> Academic Details </button>
+  </li>
+</ul>
+{% endif %}
+
+<div class="row" id="personal_details">
+  <div class="col-xs-12 col-sm-2 center">
+
+    <form action="{{ url_for('profileChanges') }}" method="post" id="editProfile" enctype="multipart/form-data">
+    </form>
+
+    <br>
+    {% if session["user_type"] == "mentor" %}
+    <span class="profile-picture">
+      <img id="profilePicture" src="{{ url_for('static', filename=session['pic']) }}" alt="Profile Picture">
+    </span>
+    {%else%}
+    <span class="profile-picture">
+      <img id="profilePicture" src="{{ url_for('static', filename=session['pic']) }}" alt="Profile Picture">
+    </span>
+    {% endif %}
+
+    <div class="space space-4"></div>
+
+    <a href="#" class="btn btn-sm btn-block btn-danger" style='max-width: 100%;'>
+      <input type="file" name="file" form="editProfile" onchange="updateProfilePicture(this);" accept="image/*" style="max-width: 100%;">
+    </a>
+  </div><!-- /.col -->
+
+  <div class="col-xs-12 col-sm-10">
+    <h2 style='margin-top: 30px;'>
+      <span style="text-align: center;"> Personal Details </span>
+    </h2>
+    <div class="line"></div>
+    <h3>
+      <span class="middle">{{session['fname']}} {{session['lname']}}</span>
+    </h3>
+    <div class="profile-user-info">
+
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Username </div>
+        <div class="profile-info-value">
+          <input class="form-control" type="text" placeholder="{{session['username']}} (Can't be changed)" readonly>
+        </div>
+      </div>
+
+      
+      <div class="profile-info-row">
+        <div class="profile-info-name"> First Name </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="fname" class="form-control" value="{{session['fname'] or '' }}">
+        </div>
+      </div>
+
+
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Last Name </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="lname" class="form-control" value="{{session['lname'] or '' }}">
+        </div>
+      </div>
+
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> D.O.B </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="dob" class="form-control" value="{{session['dob'] or '' }}" placeholder = 'Enter D.O.B in (dd/mm/yyyy) *'>
+        </div>
+      </div>
+      {%endif%}
+      
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> PRN NO. </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="prn_num" class="form-control" value="{{ session['prn_num'] or '' }}" placeholder = 'Enter PRN NO. *'>
+        </div>
+      </div>
+      {%endif%}
+
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Year of Study </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="year" class="form-control" value="{{session['year'] or '' }}" placeholder = 'Enter year of study *'>
+        </div>
+      </div>
+      {%endif%}
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Branch </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="branch" class="form-control" value="{{session['branch'] or '' }}" placeholder = 'Enter branch *'>
+        </div>
+      </div>
+      {%endif%}
+      
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Batch </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="batch" class="form-control" value="{{session['batch'] or '' }}" placeholder = 'Enter batch *'>
+        </div>
+      </div>
+      {%endif%}
+
+
+      <div class="profile-info-row">
+        <div class="profile-info-name"> College Email </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="email" class="form-control" value="{{session['email'] or '' }}" placeholder = 'Enter college email (ac.in) *'>
+        </div>
+      </div>
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Mobile No. </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="mobile_no" class="form-control" value="{{session['mobile_no'] or '' }}" placeholder = 'Enter your mobile number *'>
+        </div>
+      </div>
+      {%endif%}
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Address </div>
+        <div class="profile-info-value">
+          <textarea class="form-control" form="editProfile" name="address" id="exampleFormControlTextarea1" rows="5" placeholder='Enter address *'>{{session["address"] or '' }}</textarea>
+        </div>
+      </div>
+      {%endif%}
+
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Blood Group </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="blood_grp" class="form-control" value="{{session['blood_grp'] or '' }}" placeholder = 'Enter blood group *'>
+        </div>
+      </div>
+      {%endif%}
+
+
+      {% if session["user_type"] == "mentee" %}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> LinkedIn Id </div>
+        <div class="profile-info-value">
+          <input type="text" form="editProfile" name="linkedin_pro" class="form-control" value="{{session['linkedin_pro'] or '' }}" placeholder = 'Enter LinkedIn Profile Link *'>
+        </div>
+      </div>
+      {%endif%}
+
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Job </div>
+        <div class="profile-info-value">
+          {% if session["user_type"] == "mentor" %}
+            <input type="text" form="editProfile" name="job" class="form-control" value="{{session['job'] or '' }}">
+          {% else %}
+            <input class="form-control" type="text" placeholder="Student" readonly>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if session["user_type"] == "mentee" %}
+    <h2 style='margin-top: 30px;'>
+      <span style="text-align: center;"> Parent Details </span>
+    </h2>
+    <div class='line'></div>
+    <h5 style='margin-top: 30px;'>
+      <span style="text-align: center;"> Father's Details </span>
+    </h5>
+    <div class="profile-user-info">
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Name </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="father_name" class="form-control" value="{{session['father_name'] or '' }}"  placeholder='Enter name *'>
+      </div>
+    </div>
+
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Occupation </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="father_occupation" class="form-control" value="{{session['father_occupation'] or '' }}" placeholder='Enter occupation *'>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Mobile No. </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="father_mobile_no" class="form-control" value="{{session['father_mobile_no'] or '' }}" placeholder='Enter mobile number *'>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Email </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="father_email" class="form-control" value="{{session['father_email'] or '' }}" placeholder='Enter email *'>
+      </div>
+    </div>
+  </div>
+
+  <h5 style='margin-top: 30px;'>
+    <span style="text-align: center;"> Mother's Details </span>
+  </h5>
+  <div class="profile-user-info">
+  <div class="profile-info-row">
+    <div class="profile-info-name"> Name </div>
+    <div class="profile-info-value">
+      <input type="text" form="editProfile" name="mother_name" class="form-control" value="{{session['mother_name'] or '' }}"  placeholder='Enter name *'>
+    </div>
+  </div>
+
+
+  <div class="profile-info-row">
+    <div class="profile-info-name"> Occupation </div>
+    <div class="profile-info-value">
+      <input type="text" form="editProfile" name="mother_occupation" class="form-control" value="{{session['mother_occupation'] or '' }}" placeholder='Enter occupation *'>
+    </div>
+  </div>
+
+  <div class="profile-info-row">
+    <div class="profile-info-name"> Mobile No. </div>
+    <div class="profile-info-value">
+      <input type="text" form="editProfile" name="mother_mobile_no" class="form-control" value="{{session['mother_mobile_no'] or '' }}" placeholder='Enter mobile number *'>
+    </div>
+  </div>
+
+  <div class="profile-info-row">
+    <div class="profile-info-name"> Email </div>
+    <div class="profile-info-value">
+      <input type="text" form="editProfile" name="mother_email" class="form-control" value="{{session['mother_email'] or '' }}" placeholder='Enter mobile number *'>
+    </div>
+  </div>
+</div>
+    {%endif%}
+
+    {% if session["user_type"] == "mentee" %}
+    <h2 style='margin-top: 30px;'>
+      <span style="text-align: center;"> Academic Details </span>
+    </h2>
+    <div class="line"></div>
+    <div class="profile-user-info">
+    <div class="profile-info-row">
+      <div class="profile-info-name"> SSC % </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="ssc" class="form-control" value="{{session['ssc'] or '' }}"  placeholder='Enter %'>
+      </div>
+    </div>
+
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> HSC % </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="hsc" class="form-control" value="{{session['hsc'] or '' }}" placeholder='Enter %'>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> CET/JEE Score </div>
+      <div class="profile-info-value">
+        <input type="text" form="editProfile" name="cet_jee" class="form-control" value="{{session['cet_jee'] or '' }}" placeholder='Enter score'>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Hobbies/Interests </div>
+      <div class="profile-info-value">
+        <textarea class="form-control" form="editProfile" name="hobbies" id="exampleFormControlTextarea1" rows="3" placeholder='Enter hobbies'>{{session["hobbies"] or '' }}</textarea>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Strengths </div>
+      <div class="profile-info-value">
+        <textarea class="form-control" form="editProfile" name="strengths" id="exampleFormControlTextarea1" rows="3" placeholder='Enter your strengths'>{{session["strengths"] or '' }}</textarea>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Weakness </div>
+      <div class="profile-info-value">
+        <textarea class="form-control" form="editProfile" name="weakness" id="exampleFormControlTextarea1" rows="3" placeholder='Enter your weakness'>{{session["weakness"] or '' }}</textarea>
+      </div>
+    </div>
+
+    <div class="profile-info-row">
+      <div class="profile-info-name"> Goals </div>
+      <div class="profile-info-value">
+        <textarea class="form-control" form="editProfile" name="goals" id="exampleFormControlTextarea1" rows="3" placeholder='Enter your goals'>{{session["goals"] or '' }}</textarea>
+      </div>
+    </div>
+  </div>
+    {%endif%}
+    <div class="line"></div>
+    {% if session["user_type"] == "mentee" %}
+    <div class="col-xs-12 col-sm-3 center">
+      <!-- ... (other profile content) -->
+   
+      <!-- Display the QR code image -->
+      <img id="qrCodeImage" src="{{ url_for('static', filename='img/qrcode_' + session['username'] + '.png') }}?t={{ timestamp }}" alt="QR Code" style="max-width: 100%;">
+   </div>
+   
+   <button id="saveAsPngButton" class="btn btn-outline-success">Save as PNG</button>
+
+   <div class="line"></div>
+      <div class="widget-box transparent">
+        <div class="form-group">
+      <label for="exampleFormControlTextarea1">Edit Bio</label>
+      <textarea class="form-control" form="editProfile" name="bio" id="exampleFormControlTextarea1" rows="3" placeholder='Enter bio'>{{session["bio"] or '' }}</textarea>
+  
+    </div>
+      </div>
+      
+   <script>
+    document.getElementById("saveAsPngButton").addEventListener("click", function () {
+        // Get the QR code image element
+        const qrImage = document.getElementById("qrCodeImage");
+        const username = "{{ session['username'] }}";
+
+        // Create a temporary link element
+        const a = document.createElement("a");
+        a.href = qrImage.src; // Set the URL to the QR code image
+        a.download = `${username}_QRcode.png`; // Set the desired filename for the download
+        document.body.appendChild(a);
+
+        // Trigger a click event on the link to start the download
+        a.click();
+
+        // Remove the temporary link element
+        document.body.removeChild(a);
+    });
+    </script>
+
+{% else %}
+{%endif%}
+      <div class="profile-info-row">
+        <div class="profile-info-name"> Preferences </div>
+
+        <div class="profile-info-value">
+          {% if session["user_type"] == "mentor" %}
+
+            {% if session["cv_help"] %}
+              <input type="checkbox"  form="editProfile" name = "cvhelp2"  id="exampleCheck4" checked>
+            {% else %}
+              <input type="checkbox"  form="editProfile" name = "cvhelp2"  id="exampleCheck4" >
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck4">CV tips/Cover letter help</label><br>
+
+            {% if session["meetStudents"] %}
+              <input type="checkbox"  form="editProfile" name = "meet_students"  id="exampleCheck5" checked>
+            {% else %}
+              <input type="checkbox"  form="editProfile" name = "meet_students"  id="exampleCheck5">
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck5">Meeting current students and advising them</label><br>
+
+            {% if session["mockInterview"] %}
+              <input type="checkbox"  form="editProfile" name = "mockInterview2"  id="exampleCheck6" checked>
+            {% else %}
+              <input type="checkbox"  form="editProfile" name = "mockInterview2"  id="exampleCheck6" >
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck6">Mock interviews</label><br>
+
+            {% if session["workExp"] %}
+              <input type="checkbox"  form="editProfile" name = "workExp"  id="exampleCheck7" checked>
+            {% else %}
+              <input type="checkbox"  form="editProfile" name = "workExp"  id="exampleCheck7">
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck7">Arranging work experience</label><br>
+
+
+          {% else %}
+
+            {% if session["cv_help"] %}
+              <input type="checkbox"  form="editProfile" name = "cvhelp2"  id="exampleCheck1" checked>
+            {% else %}
+              <input type="checkbox"  form="editProfile" name = "cvhelp2"  id="exampleCheck1" >
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck1">CV tips/Cover letter help</label><br>
+
+            {% if session["mockInterview"] %}
+              <input type="checkbox" form="editProfile" name="mockInterview"  id="exampleCheck3" checked>
+            {% else %}
+              <input type="checkbox" form="editProfile" name="mockInterview"  id="exampleCheck3">
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck3">Mock interviews</label><br>
+
+            {% if session["meetAlumni"] %}
+              <input type="checkbox" form="editProfile" name="meetAlumni"  id="exampleCheck2" checked>
+            {% else %}
+              <input type="checkbox" form="editProfile" name="meetAlumni"  id="exampleCheck2">
+            {% endif %}
+            <label class="form-check-label" for="exampleCheck2">Meeting an alumni mentor</label><br>
+          {% endif %}
+        </div>
+    </div>
+  </div><!-- /.col -->
+</div><!-- /.row -->
+
+{% if session["user_type"] == "mentee" %}
+<div class="modal fade" id="remarkModal" tabindex="-1" role="dialog" aria-labelledby="remarkModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title" id="remarkModalLabel">Remarks for {{ mentee.fname }} {{ mentee.lname }}</h4>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              {% if mentee_remarks %}
+              <h5> Mentor: <p style="display: inline;">{{ mentor_name }}</p> </h5>
+              <br>
+              <h5> Remark: <p style="display: inline;">{{ mentee_remarks }}</p> </h5>
+                  <div class='line'></div>
+                  
+              {% else %}
+                  <p>No remarks given by mentor yet.</p>
+              {% endif %}
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+{% endif %}
+
+
+{% if session["user_type"] == "mentee" %}
+<div id="academic_details" style='display: none;'>
+  <div class="space-20"></div>
+<h2 style='text-align: center; margin-top: 20px;'>Mentee Grade Table</h2>
+<div class='line'></div>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Grades Table</title>
+        <style>
+            
+      </style>
+    </head>
+    <body>
+      
+      <div class='container-fluid'>
+      <form method="POST" action="{{ url_for('academicChanges') }}" id="academicChanges">
+        <div class="container center">
+            <div style="display: flex; justify-content: center;">
+                <div class="semester-select" style="align-items: center;">
+                    <!-- Dropdown for selecting semester -->
+                    <label for="semester">Select Semester:</label>
+                    <select name="sem" id="semester" class="form">
+                        <option value="">Select Semester</option>
+                        <!-- Generate options dynamically -->
+                        {% for sem in range(1, 9) %}
+                        <option value="{{ sem }}">Semester {{ sem }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" id="row-count" name="row-count" value="5">
+            <div class="table-container">
+            <table id="mentee-grades">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Subject</th>
+                        <th>Marks in IA (Avg)</th>
+                        <th>Marks in Semester</th>
+                        <th>Total Marks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows generated dynamically -->
+                    <!-- Use a loop to generate rows with unique names -->
+                    {% for i in range(5) %}
+                    <tr>
+                        <td data-label="Sr. No.">{{ i + 1 }}</td>
+                        <td data-label="Subject"><input type="text" name="subject_{{ i }}" class="form" placeholder='Enter subject {{ i + 1 }}'></td>
+                        <td data-label="Marks in IA (Avg)"><input type="text" name="marks_ia_{{ i }}" class="form" placeholder='Enter marks'></td>
+                        <td data-label="Marks in Semester"><input type="text" name="marks_sem_{{ i }}" class="form" placeholder='Enter marks'></td>
+                        <td data-label="Total Marks"><input type="text" name="total_marks_{{ i }}" class="form" placeholder='Enter marks'></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div>
+        
+            <input type="text" name="cgpa" class="form" placeholder="Enter CGPA" style="width: 80%; padding: 10px; margin: 10px auto 0 auto; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; display: block;">
+            
+            <div class='button-table' style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                <div class="button-container">
+                    <button class="add-row-button" onclick="addRow()">Add Row</button>
+                    <button class="delete-row-button" onclick="deleteRow()">Delete Row</button>
+                </div>
+                <div class='submit' style='text-align: center;'>
+                  <button class="btn btn-outline-success" type="submit">Submit</button>
+              </div>
+            </div>
+        </form>
+      
+        <div class="modal fade" id="academicModal" tabindex="-1" role="dialog" aria-labelledby="academicModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document" style="max-width: 600px;">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h2 class="modal-title w-100 text-center" id="academicModalLabel">Grades</h2>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+      
+                  <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                      {% if academic_record %}
+                          {% set semesters = academic_record|groupby('sem') %}
+                          {% for semester, records in semesters %}
+                              <h3 class="text-center mb-4">Semester {{ semester }}</h3>
+                              <table class="table table-bordered">
+                                  <thead class="thead-light">
+                                      <tr>
+                                          <th>Subject</th>
+                                          <th>IA Marks</th>
+                                          <th>Semester Marks</th>
+                                          <th>Total Marks</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      {% for record in records %}
+                                          <tr>
+                                              <td>{{ record.subject }}</td>
+                                              <td>{{ record.marks_ia }}</td>
+                                              <td>{{ record.marks_sem }}</td>
+                                              <td>{{ record.total_marks }}</td>
+                                          </tr>
+                                      {% endfor %}
+                                  </tbody>
+                              </table>
+                              <h4 class="text-center mt-3 mb-4">CGPA: {{ records[0].cgpa }}</h4>
+                              <hr class="my-4">
+                          {% endfor %}
+                      {% else %}
+                          <p class="text-center">No details added by {{ username }}</p>
+                      {% endif %}
+                  </div>
+      
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+<script>
+  document.getElementById("academicChanges").addEventListener("submit", function (event) {
+    // Validate each row before submitting the form
+    if (!validateRows()) {
+        // If any row is invalid, prevent the form submission
+        event.preventDefault();
+        // Display an error message
+        alert("Error: Please fill in all fields for each row.");
+    }
+});
+
+function validateRows() {
+    // Get all rows in the table body
+    const rows = document.querySelectorAll('#mentee-grades tbody tr');
+
+    // Iterate over each row and validate its input fields
+    for (let row of rows) {
+        // Get input fields in the current row
+        const inputs = row.querySelectorAll('input[type="text"]');
+
+        // Check if any input field in the row is empty
+        for (let input of inputs) {
+            if (!input.value.trim()) {
+                return false; // Return false if any field in the row is empty
+            }
+        }
+    }
+
+    return true; // Return true if all rows have all fields filled in
+}
+
+  function addRow() {
+    const rowCountInput = document.getElementById('row-count');
+    let rowCount = parseInt(rowCountInput.value);
+
+    const tableBody = document.querySelector('#mentee-grades tbody');
+
+    // Check if table body exists, create it if not
+    if (!tableBody) {
+      console.error('Table body does not exist.');
+      return;
+    }
+
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+      <td>${rowCount + 1}</td>
+      <td><input type="text" name="subject_${rowCount}" class="form" placeholder="Enter subject ${rowCount + 1}"></td>
+      <td><input type="text" name="marks_ia_${rowCount}" class="form" placeholder="Enter marks"></td>
+      <td><input type="text" name="marks_sem_${rowCount}" class="form" placeholder="Enter marks"></td>
+      <td><input type="text" name="total_marks_${rowCount}" class="form" placeholder="Enter marks"></td>
+    `;
+
+    tableBody.appendChild(newRow);
+
+    // Increment the row count and update the hidden input field
+    rowCount++;
+    rowCountInput.value = rowCount;
+}
+
+function deleteRow() {
+    const rowCountInput = document.getElementById('row-count');
+    let rowCount = parseInt(rowCountInput.value);
+
+    if (rowCount > 0) {
+      // Decrement the row count
+      rowCount--;
+
+      // Update the hidden input field
+      rowCountInput.value = rowCount;
+
+      // Find the table's tbody
+      const tableBody = document.querySelector('#mentee-grades tbody');
+
+      // Remove the last row
+      if (tableBody && tableBody.children.length > 0) {
+        tableBody.removeChild(tableBody.lastElementChild);
+      }
+    }
+}
+
+  $(document).ready(function () {
+    $("#personal_details-btn").click(function () {
+      $("#personal_details").show();  // Show personal details
+      $("#academic_details").hide();  // Hide academic details
+    });
+
+    $("#academic_details-btn").click(function () {
+      $("#academic_details").show();  // Show academic details
+      $("#personal_details").hide();  // Hide personal details
+    });
+  });
+</script>
+
+<script>
+  function updateProfilePicture(input) {
+    const profilePicture = document.getElementById("profilePicture");
+
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        profilePicture.src = e.target.result;
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+        $('#blah').attr('src', e.target.result);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get references to the buttons
+    const academicDetailsBtn = document.getElementById("academic_details-btn");
+    const viewAcademicBtn = document.getElementById("view-academic-btn");
+    const personalDetailsBtn = document.getElementById("personal_details-btn");
+    const saveChangesBtn = document.getElementById("save-changes-btn");
+
+    // Check if the button should be visible based on stored state
+    const viewAcademicBtnVisible = localStorage.getItem("viewAcademicBtnVisible");
+    if (viewAcademicBtnVisible === "true") {
+      viewAcademicBtn.style.display = "block";
+      saveChangesBtn.style.display = "none";
+    } else {
+      viewAcademicBtn.style.display = "none";
+      saveChangesBtn.style.display = "block";
+    }
+
+    // Add event listener to the academic details button
+    academicDetailsBtn.addEventListener("click", function () {
+      // Show the view academic details button
+      viewAcademicBtn.style.display = "block";
+      // Hide the save changes button
+      saveChangesBtn.style.display = "none";
+      // Store visibility state in local storage
+      localStorage.setItem("viewAcademicBtnVisible", "true");
+    });
+
+    // Add event listener to the personal details button
+    personalDetailsBtn.addEventListener("click", function () {
+      // Hide the view academic details button
+      viewAcademicBtn.style.display = "none";
+      // Show the save changes button
+      saveChangesBtn.style.display = "block";
+      // Store visibility state in local storage
+      localStorage.setItem("viewAcademicBtnVisible", "false");
+    });
+  });
+</script>
+
+
+</body>
+</html>
+{% endif %}
+{% endblock %}
+
+{% block right_button %}
+{% if session["user_type"] == "mentee" %}
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('menteeHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('resources') }}';">Resources</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('analysis') }}';">Analysis</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-secondary" id="remark-btn" style="display: none;" data-toggle="modal" data-target="#remarkModal">Remarks</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-secondary" id="view-academic-btn" style="display: none;" data-toggle="modal" data-target="#academicModal">Academic Details</button>
+{% endif %}
+
+{% if session["user_type"] == "mentor" %}
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('mentorHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('mentee') }}';">Mentees</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('network') }}';">Network</button>
+{% endif %}
+
+<button style = 'margin-right: 10px;' class="btn btn-outline-primary" onclick="window.location.href='{{ url_for('change_password') }}';">Change Password</button>
+<button style = 'margin-right: 10px;' type="submit" form="editProfile" id="save-changes-btn" class="btn btn-outline-success">Save Changes</button>
+
+{% endblock %}

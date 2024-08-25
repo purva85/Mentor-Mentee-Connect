@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+
+    <!--Font stylesheet here-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!--JQuery here-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!--Bootstrap here css and js-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+  </head>
+  <body>
+
+    <nav class="navbar navbar-light" style="background-color: 	#008080;">
+        {% if self.left_button() %}
+        <button type="button" class="btn btn-light">{% block left_button %}{% endblock %}</button>
+        {% else %}
+        <a style = 'color: white; font-weight: 500;' class="navbar-brand" href="/">Mentor Connect</a>
+        {% endif %}
+        <form class="form-inline">
+          {% block right_button %}{% endblock %}
+          
+        </form>
+    </nav>
+
+    <footer class="footer text-center text-white">
+        <div class="text-center p-3" style="background-color: #212529">
+            <p class="mb-0">
+                © <span id="currentYear"></span> SIES Graduate School Of Technology. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.botpress.cloud/webchat/v1/inject.js"></script>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
+    
+    <script>
+      window.botpressWebChat.init({
+          "composerPlaceholder": "Chat with bot",
+          "botConversationDescription": "This is a chatbot where you can ask questions ?",
+          "botId": "46194b2c-bdc1-475c-989a-5f1bc81be3de",
+          "hostUrl": "https://cdn.botpress.cloud/webchat/v1",
+          "messagingUrl": "https://messaging.botpress.cloud",
+          "clientId": "46194b2c-bdc1-475c-989a-5f1bc81be3de",
+          "webhookId": "58fc4575-da25-4d25-b6aa-480a59cfb13a",
+          "lazySocket": true,
+          "themeName": "prism",
+          "frontendVersion": "v1",
+          "useSessionStorage": true,
+          "enableConversationDeletion": true,
+          "theme": "prism",
+          "themeColor": "#2563eb"
+      });
+    </script>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            {% if 'Error' not in message %}
+                <div class="alert alert-success" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    {{ message }}
+                </div>
+            {% else %}
+                <div class="alert alert-danger error-message" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    {{ message }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+    {% block body %}
+    {% endblock %}
+                
+  </body>
+</html>

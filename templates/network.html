@@ -1,0 +1,172 @@
+{% extends "home_layout.html" %}
+
+{% block title %}
+    Network
+{% endblock %}
+
+{% block body %}
+<h2 style="text-align:center;">Network</h2>
+<p style="text-align:center;">Here is a list of all mentees who have signed up to the platform</p>
+<form action="{{ url_for('network') }}" method="post" style="text-align:center; padding-bottom: 20px;">
+</form>
+
+<div class="container">
+
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search mentee" id="searchInput">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="searchButton">Search</button>
+    </div>
+</div>
+<br>
+
+  <div class="row justify-content-center" style="padding-bottom: 20px;">
+
+    {% if mentee_data %}
+      {% for mentee in mentee_data %}
+        <div class="col-sm-12 col-md-6 col-lg-4 mt-4 mentee-card" id='column'>
+          <a href="#" data-toggle="modal" data-target="#{{ mentee.username }}">
+              <div class="mentee-card-wrapper">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front" style="background-color: #006666;">
+                            {% set file_path = ["img/", mentee.profile_pic]|join %}
+                            <img src="{{ url_for('static', filename='img/' + mentee.profile_pic) }}" alt="Avatar" style="max-height: 200px;width:100%;padding:10px; border-radius: 50%;">
+                            <h5 style="color:black; font-weight: 700;" class='mentee-name'>{{ mentee.fname }} {{ mentee.lname }}</h5>
+                            
+                            <button type="button" class="btn btn-outline-primary">View Profile</button>
+                        </div>
+                    </div>
+              </div>
+            </div>
+        </a>        
+        </div>
+
+      <!-- Modal -->
+      <div class="modal fade" id={{mentee.username}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">{{mentee.fname}} {{mentee.lname}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <center>
+                          <img src="{{ url_for('static', filename='img/' + mentee.profile_pic) }}" alt="Avatar" name="aboutme" width="140" height="140" border="0" style="border-radius: 50%; border: 3px solid #000000;">
+                          <h3 class="media-heading">{{mentee.fname}} {{mentee.lname}}</h3>
+                          <span><strong>Preferences: </strong></span>
+                          {% if mentee.cv_help == true %}
+                              <span class="badge badge-pill badge-success">CV checks</span>
+                          {% endif %}
+                          {% if mentee.meetAlumni == true %}
+                              <span class="badge badge-pill badge-success">Meeting Alumni</span>
+                          {% endif %}
+                          {% if mentee.mockInterview == true %}
+                              <span class="badge badge-pill badge-success">Mock Interviews</span>
+                          {% endif %}
+
+                          </center>
+                          <hr>
+                          <center>
+                          <p class="text-left" style="color:black; font-weight: 400;"><strong class='font-weight: 500;'>Year of Study: </strong>
+                            {{mentee.year}}
+                          <hr>
+
+                          <p class="text-left" style="color:black; font-weight: 400;"><strong>Branch: </strong>
+                            {{mentee.branch}}
+                          <hr>
+
+                          <p class="text-left" style="color:black; font-weight: 400;"><strong>Batch: </strong>
+                            {{mentee.batch}}
+                          <hr>
+
+                          <p class="text-left" style="color:black; font-weight: 400;"><strong>Email: </strong>
+                            {{mentee.email}}
+                          <hr>
+
+                          <p class="text-left" style="color: black; font-weight: 400;">
+                            <strong>LinkedIn Profile: </strong>
+                            <a href="{{ mentee.linkedin_pro }}" target="_blank">{{ mentee.linkedin_pro }}</a>
+                            <hr>
+
+                          <p class="text-left" style="color:black; font-weight: 400;"><strong>Bio: </strong>
+                            {{mentee.bio}}
+                          <hr>
+
+                          <br>
+                          </center>
+            </div>
+            <div class="modal-footer">
+              <div class="col">
+              <a href="#" class="fa fa-linkedin" style="text-align:center;"></a>
+              <a href="#" class="fa fa-envelope-open-text" style="text-align:center;"></a>
+              </div>
+              <form action="{{ url_for('add_mentee') }}" method="post">
+                <input type="hidden" name="mentee_username" value="{{ mentee.username }}">
+                <input type="hidden" name="mentee_fname" value="{{ mentee.fname }}">
+                <input type="hidden" name="mentee_lname" value="{{ mentee.lname }}">
+                <button type="submit" class="btn btn-outline-success">Add Mentee</button>
+            </form>               
+          </div>
+        </div>   
+        </div>
+      </div>
+      {% endfor %}
+    {% endif %}
+</div>
+</div>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+  // Function to filter mentees based on search input
+  function filterMentees() {
+      // Get the search input value
+      var searchText = document.getElementById('searchInput').value.toLowerCase();
+      // Get all mentee cards
+      var menteeCards = document.getElementsByClassName('mentee-card');
+      // Loop through all mentee cards
+      for (var i = 0; i < menteeCards.length; i++) {
+          // Get the mentee card's name
+          var menteeName = menteeCards[i].querySelector('.mentee-name').textContent.toLowerCase();
+          // Show the mentee card if the name matches the search text, otherwise hide it
+          if (menteeName.includes(searchText)) {
+              menteeCards[i].style.display = 'block';
+          } else {
+              menteeCards[i].style.display = 'none';
+          }
+      }
+  }
+
+  // Event listener for input in the search field
+  document.getElementById('searchInput').addEventListener('input', filterMentees);
+</script>
+
+<script type="text/javascript">
+  $().ready(function(){
+      $('[rel="tooltip"]').tooltip();
+
+      $('a.scroll-down').click(function(e){
+          e.preventDefault();
+          scroll_target = $(this).data('href');
+           $('html, body').animate({
+               scrollTop: $(scroll_target).offset().top - 60
+           }, 1000);
+      });
+
+  });
+
+</script>
+
+{% endblock %}
+
+{% block right_button %}
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('mentorHome') }}';">Home</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('mentee') }}';">Mentees</button>
+<button style = 'margin-right: 10px;' type="button" id="primary" class="btn btn-outline-primary" id="primary" onclick="window.location.href='{{ url_for('network') }}';">Network</button>
+<button style = 'margin-right: 10px;' type="button" class="btn btn-outline-success" onclick="window.location.href='{{ url_for('editProfile') }}';">Profile</button>
+{% endblock %}
